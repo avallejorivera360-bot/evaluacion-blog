@@ -20,4 +20,9 @@
 
 ## **🧩 4. Pie de página**
 
-- Incluye la información que consideres necesaria
+1. Se incluye en la cabecera un pre-header que contiene informacion de contacto y RRSS
+2. Un menu de navegacion.
+3. tabla de contenido enlazada a sus secciones
+4. contenido enumerado con contadores enriquecido con imagenes.
+5. un boton que podria llevarte a mas entradas de blog.
+

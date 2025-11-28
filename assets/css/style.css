@@ -43,6 +43,7 @@
     --color-acento:hsl(34, 83%, 39%);
     --color-fondo-oscuro:rgb(154, 139, 99);
   }
+ 
 }
 /*---------------Estilos Base----------------*/
 html{
@@ -56,11 +57,12 @@ body{
     background-color: var(--color-fondo);
    -webkit-font-smoothing: antialiased;
    -moz-osx-font-smoothing: grayscale;
-   counter-reset: semanas;
+   counter-reset: semana-counter;
 }
 
 h1{
     font-family: 'Hind-700', sans-serif;
+    text-align: center;
     font-optical-sizing: auto;
 }
 h2{
@@ -210,7 +212,11 @@ a:hover{
 /*--------------------Estilos Globales--------------------*/
 /* borde rosa que aparece cuando se hace pequeña */
 header{
-    border-top: 3px var(--color-acento) solid;
+  position: fixed;
+  width: 100%;
+  z-index: 999;
+  top:0;
+  background-color: var(--color-fondo);
 }
 @media screen and (min-width: 600px){
     header{
@@ -259,54 +265,89 @@ header .pre-header a:hover{
   opacity: 1;
 }
 
-.semana {
-    counter-increment: semanas;
-}
-/* ====== TABLA DE CONTENIDO ====== */
-.table-content{
-  list-style: none;
-    margin-block-start: 1em;
-    margin-block-end: 1em;
-    padding-inline-start: 40px;
-}
-/* Numeración automática antes del título de la sección */
 .semana h2::before {
-    content: counter(semanas) ". ";
-    color: var(--color-fondo-oscuro);
-    font-weight: bold;
-    margin-right: 5px;
+  counter-increment: semana-counter; /* aumenta contador de semana */
+  content: counter(semana-counter) ". ";
+  font-weight: bold;
+  margin-right: 0.3em;
+  color: var(--color-acento);
+}
+/* ====== CONTENIDO ARTICLE ====== */
+article{
+  max-width: 70ch;
+  margin-inline: auto;
+  width: 90%;
+  line-height: 1.5;
+  margin-top: 240px;
+}
+article section{
+scroll-margin-top:270px ;
 }
 
-
-/* Asignamos el mismo contador a la lista */
+/* ====== TABLA DE CONTENIDO CON CONTADORES ====== */
 .toc {
-    counter-reset: tocCounter;
+  list-style: none;
+  counter-reset: toc-counter; /* reinicia contador principal */
+  margin-left: 0;
+  padding-left: 0;
 }
 
-/* Cada elemento de la tabla aumenta ese contador */
-.toc li {
-    counter-increment: tocCounter;
+/* Elementos de primer nivel */
+.toc > li {
+  counter-increment: toc-counter; /* incrementa el contador principal */
+  margin-bottom: 0.5em;
 }
 
-/* Colocamos el número antes del enlace */
-.toc li a::before {
-    content: counter(tocCounter) ". ";
-    color: var(--color-acento);
-    font-weight: bold;
-    margin-right: 4px;
-}      
-/*------------------- Navigation --------------------------*/
+/* Numeración de primer nivel antes del enlace */
+.toc > li > a::before {
+  content: counter(toc-counter) ". ";
+  color: var(--color-acento); /* color de acento, puedes cambiar */
+  font-weight: bold;
+  margin-right: 0.3em;
+}
+
+/* Sublista (segundo nivel) */
+.toc > li > ul {
+  list-style: none;
+  counter-reset: sub-toc-counter; /* reinicia contador secundario */
+  margin-left: 1.5em; /* sangría para subapartados */
+  padding-left: 0;
+}
+
+/* Elementos de segundo nivel */
+.toc > li > ul > li {
+  counter-increment: sub-toc-counter; /* incrementa contador secundario */
+  margin-bottom: 0.3em;
+}
+
+/* Numeración de segundo nivel antes del enlace */
+.toc > li > ul > li > a::before {
+  content: counter(toc-counter) "." counter(sub-toc-counter) " ";
+  color: var(--color-acento); 
+  font-weight: normal;
+  margin-right: 0.3em;
+}
+
 
 /*------------------- Navigation --------------------------*/
+nav {
+  position: absolute;
+  width: 100%;
+  background-color: var(--color-fondo);
+}
 
+@media screen and (min-width: 600px) {
+  nav {
+    position: absolute;
+    width: 100%;
+    background-color: var(--color-fondo);
+  }
+}
 
-.nav .boton a {
+.nav .btn-news a {
     background-color: var(--color-secundario);
     color: var(--color-texto);
-    padding: 2.5em;
-    margin-top: auto;
-    width: 3em;
-    height: 1.5em;
+    padding:1.5em;
     border-radius: 5px;
 }
 
@@ -382,6 +423,7 @@ nav li a:hover {
   }
   nav li:not(:last-child) a:hover {
     border-top-color: currentColor;
+
   }
 }
   /* Mostrar menú móvil */
@@ -389,7 +431,14 @@ nav li a:hover {
     transform: translateX(0) !important;
   }
   
-
+.btn-new{
+  display:inline-flex;
+}
+a.btn-new-1{
+ background-color: var(--color-secundario);
+ padding: 0.8em;
+ border-radius: 5px;
+}
 /*------------------- Footer --------------------------*/
 footer a:hover,
 a:focus {
@@ -410,4 +459,95 @@ footer{
 }
 .content-blog{
     margin-top: 1em;
+}
+
+
+
+/* ================================
+   ESTILOS PARA IMPRESIÓN
+   ================================ */
+   @media print {
+
+    /* Márgenes estándar de impresión */
+    @page {
+        margin: 2cm;
+    }
+
+    /* Quitar fondos, colores excesivos y sombras */
+    * {
+        background: transparent !important;
+        color: #000 !important;
+        box-shadow: none !important;
+        text-shadow: none !important;
+    }
+
+    /* Ocultar elementos no necesarios */
+    header,
+    nav,
+    .pre-header,
+    .rrss,
+    .menu-toggle,
+    .btn-cta,
+    footer,
+    .button,
+    .wobble-top {
+        display: none !important;
+    }
+
+    /* Mostrar únicamente el contenido del artículo */
+    body {
+        font-size: 12pt;
+        line-height: 1.4;
+    }
+
+    /* Tabla de contenido visible */
+    .table-content,
+    .toc {
+        page-break-after: always;
+        margin-bottom: 20px;
+    }
+
+    .table-content ul,
+    .toc ul {
+        margin-left: 20px;
+    }
+
+    /* Imágenes NO se imprimen */
+    img {
+        display: none !important;
+        visibility: hidden !important;
+    }
+
+    /* Títulos claros */
+    h1, h2, h3, h4, h5 {
+        color: #000 !important;
+        page-break-after: avoid;
+    }
+
+    /* Cada semana comienza en una nueva página */
+    section.semana {
+        page-break-before: always;
+    }
+
+    /* Evitar cortes bruscos dentro de párrafos y títulos */
+    p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+    }
+
+    /* Contenedor a ancho completo */
+    .container {
+        max-width: 100% !important;
+        width: 100% !important;
+    }
+
+    /* Encabezado y pie de página personalizados */
+    @page {
+        @top-center {
+            content: "Bitácora Femenina — Versión de impresión";
+        }
+        @bottom-center {
+            content: "Página " counter(page) " de " counter(pages);
+        }
+    }
 }
