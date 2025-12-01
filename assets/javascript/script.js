@@ -12,3 +12,15 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
   
+  document.addEventListener("DOMContentLoaded", () => {
+    const subirBtn = document.querySelector(".subir");
+
+    window.addEventListener("scroll", () => {
+        if (window.scrollY > 300) {
+            subirBtn.classList.add("visible");
+        } else {
+            subirBtn.classList.remove("visible");
+        }
+    });
+});
+  
